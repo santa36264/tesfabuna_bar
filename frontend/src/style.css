@@ -1,0 +1,92 @@
+/* ── Fonts ──────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&display=swap');
+
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════════════
+   TesfaBunna Design Tokens
+   Identity: Ethiopian coffee culture meets warm hospitality
+   Tesfa = Hope (warmth, light, golden sunrise)
+   Bunna = Coffee (deep roast, earthy, rich)
+   ══════════════════════════════════════════════════════════════ */
+@theme {
+  /* ── Coffee palette ─────────────────────────── */
+  --color-espresso:    #1A0F07;   /* Darkest roast — main dark bg */
+  --color-roast:       #3B1F0A;   /* Dark roast brown — cards/sections */
+  --color-bean:        #6B3A2A;   /* Roasted bean — mid accent */
+  --color-crema:       #C8860A;   /* Coffee crema / golden — PRIMARY */
+  --color-honey:       #E8A020;   /* Honey amber — hover, highlights */
+  --color-cream:       #F5ECD7;   /* Steamed milk — light bg */
+  --color-parchment:   #FBF6EE;   /* Coffee filter paper — lightest bg */
+
+  /* ── Tesfa / Hope palette (warm light) ──────── */
+  --color-sunrise:     #D4722A;   /* Ethiopian dawn — warm accent */
+  --color-hope:        #F0A500;   /* Bright golden hope */
+
+  /* ── Text ────────────────────────────────────── */
+  --color-ink:         #1C1008;   /* Near-black warm text */
+  --color-muted:       #7A5C45;   /* Warm grey-brown secondary text */
+
+  /* ── Aliases used in components ─────────────── */
+  --color-primary:      #C8860A;
+  --color-primary-dark: #A36A06;
+  --color-primary-light:#E8A020;
+
+  /* ── Fonts ───────────────────────────────────── */
+  --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-sans:    'Inter', system-ui, sans-serif;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Custom scrollbar — coffee brown ────────────────────────── */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #1A0F07; }
+::-webkit-scrollbar-thumb { background: #C8860A; border-radius: 3px; }
+
+/* ── Transitions ────────────────────────────────────────────── */
+a, button, input, select, textarea {
+  transition-property: background-color, color, border-color, box-shadow, opacity, transform;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+img { transition: transform 0.5s ease !important; }
+
+/* ── Font helpers ───────────────────────────────────────────── */
+.font-serif  { font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif; }
+.font-display{ font-family: 'Cormorant Garamond', Georgia, serif; }
+.font-sans   { font-family: 'Inter', system-ui, sans-serif; }
+
+/* ── line-clamp fallback ────────────────────────────────────── */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Coffee texture overlay (subtle noise on dark sections) ─── */
+.coffee-texture {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* ── AOS ────────────────────────────────────────────────────── */
+[data-aos] { will-change: transform, opacity; }
+
+/* ── Scrollbar hide utility ─────────────────────────────────── */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

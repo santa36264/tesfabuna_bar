@@ -1,0 +1,149 @@
+﻿<template>
+  <div>
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-serif text-2xl font-bold text-[#F5ECD7]">Bar &amp; Drinks</h2>
+      <button @click="openForm()" class="px-4 py-2 bg-[#C8860A] hover:bg-[#A36A06] text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2">
+        <PlusIcon class="w-4 h-4" /> Add Drink
+      </button>
+    </div>
+
+    <div class="flex gap-2 flex-wrap mb-5">
+      <button v-for="c in ['all',...categories]" :key="c" @click="filterCat = c"
+        :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors',
+          filterCat === c ? 'bg-[#C8860A] text-white' : 'bg-[#3B1F0A] text-[#C8A882] hover:bg-[#4A2610]']">
+        {{ c }}
+      </button>
+    </div>
+
+    <div class="bg-[#3B1F0A] border border-[#5A2E18] rounded-2xl overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="border-b border-[#5A2E18]">
+          <tr class="text-[#7A5C45] text-xs uppercase tracking-wider">
+            <th class="px-4 py-3 text-left">Image</th>
+            <th class="px-4 py-3 text-left">Name</th>
+            <th class="px-4 py-3 text-left">Category</th>
+            <th class="px-4 py-3 text-right">Price</th>
+            <th class="px-4 py-3 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#5A2E18]">
+          <tr v-if="!filtered.length">
+            <td colspan="5" class="px-4 py-8 text-center text-[#7A5C45]">No drinks found.</td>
+          </tr>
+          <tr v-for="item in filtered" :key="item.id" class="hover:bg-[#2A1408]">
+            <td class="px-4 py-3">
+              <img v-if="item.image" :src="item.image" class="w-12 h-12 rounded-lg object-cover" />
+              <div v-else class="w-12 h-12 rounded-lg bg-[#2A1408]"></div>
+            </td>
+            <td class="px-4 py-3">
+              <p class="font-medium text-[#F5ECD7]">{{ item.name }}</p>
+              <p class="text-xs text-[#7A5C45] line-clamp-1">{{ item.description }}</p>
+            </td>
+            <td class="px-4 py-3">
+              <span class="text-xs bg-[#2A1408] text-[#C8860A] px-2 py-1 rounded-full">{{ item.category }}</span>
+            </td>
+            <td class="px-4 py-3 text-right text-[#C8860A] font-semibold">ETB {{ item.price }}</td>
+            <td class="px-4 py-3">
+              <div class="flex items-center justify-center gap-2">
+                <button @click="openForm(item)" class="text-[#C8A882] hover:text-[#C8860A]"><PencilIcon class="w-4 h-4" /></button>
+                <button @click="deleteDrink(item)" class="text-[#C8A882] hover:text-red-400"><TrashIcon class="w-4 h-4" /></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Teleport to="body">
+      <div v-if="showForm" class="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" @click.self="showForm=false">
+        <div class="bg-[#1A0F07] border border-[#5A2E18] rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+          <div class="flex items-center justify-between p-5 border-b border-[#5A2E18]">
+            <h3 class="font-semibold text-[#F5ECD7]">{{ editing ? 'Edit Drink' : 'Add Drink' }}</h3>
+            <button @click="showForm=false" class="text-[#7A5C45] hover:text-[#F5ECD7]"><XMarkIcon class="w-5 h-5" /></button>
+          </div>
+          <form @submit.prevent="save" class="p-5 space-y-4">
+            <div>
+              <label class="block text-xs font-medium text-[#C8A882] mb-1">Name *</label>
+              <input v-model="form.name" required class="w-full px-3 py-2 rounded-lg bg-[#2A1408] border border-[#5A2E18] text-[#F5ECD7] text-sm placeholder-[#7A5C45] focus:outline-none focus:border-[#C8860A] transition" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-[#C8A882] mb-1">Category *</label>
+              <select v-model="form.category" required class="w-full px-3 py-2 rounded-lg bg-[#2A1408] border border-[#5A2E18] text-[#F5ECD7] text-sm placeholder-[#7A5C45] focus:outline-none focus:border-[#C8860A] transition">
+                <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-[#C8A882] mb-1">Price (ETB) *</label>
+              <input v-model.number="form.price" type="number" min="0" required class="w-full px-3 py-2 rounded-lg bg-[#2A1408] border border-[#5A2E18] text-[#F5ECD7] text-sm placeholder-[#7A5C45] focus:outline-none focus:border-[#C8860A] transition" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-[#C8A882] mb-1">Description</label>
+              <textarea v-model="form.description" class="w-full px-3 py-2 h-20 rounded-lg bg-[#2A1408] border border-[#5A2E18] text-[#F5ECD7] text-sm placeholder-[#7A5C45] focus:outline-none focus:border-[#C8860A] transition" rows="2"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-[#C8A882] mb-1">Image</label>
+              <ImageUploader v-model="form.image" />
+            </div>
+            <div class="flex justify-end gap-3 pt-2">
+              <button type="button" @click="showForm=false" class="px-4 py-2 text-sm text-[#C8A882] hover:text-[#F5ECD7]">Cancel</button>
+              <button type="submit" :disabled="saving" class="px-5 py-2 bg-[#C8860A] hover:bg-[#A36A06] text-white text-sm font-semibold rounded-xl disabled:opacity-60">
+                {{ saving ? 'Saving...' : 'Save' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </Teleport>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useAdminAuth } from '../stores/auth'
+import { adminApi } from '../stores/auth'
+import { PlusIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import ImageUploader from '../components/ImageUploader.vue'
+
+const auth      = useAdminAuth()
+const items     = ref([])
+const showForm  = ref(false)
+const editing   = ref(null)
+const saving    = ref(false)
+const filterCat = ref('all')
+const categories = ['cocktails','mocktails','beer','wine','whiskey','vodka','gin','tequila','rum','soft','coffee','juice']
+const emptyForm  = () => ({ name:'', category:'cocktails', description:'', price:0, available:true, image:'' })
+const form       = ref(emptyForm())
+
+const filtered = computed(() =>
+  filterCat.value === 'all' ? items.value : items.value.filter(i => i.category === filterCat.value)
+)
+
+async function load() {
+  const res = await adminApi.get('/admin/drinks')
+  items.value = res.data.data
+}
+
+function openForm(item = null) {
+  editing.value = item
+  form.value = item ? { ...item } : emptyForm()
+  showForm.value = true
+}
+
+async function save() {
+  saving.value = true
+  try {
+    if (editing.value) await adminApi.put(`/admin/drinks/${editing.value.id}`, form.value)
+    else await adminApi.post('/admin/drinks', form.value)
+    await load(); showForm.value = false
+  } finally { saving.value = false }
+}
+
+async function deleteDrink(item) {
+  if (!confirm(`Delete "${item.name}"?`)) return
+  await adminApi.delete(`/admin/drinks/${item.id}`)
+  await load()
+}
+
+onMounted(load)
+</script>
+
