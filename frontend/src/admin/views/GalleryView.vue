@@ -38,9 +38,9 @@
 
     <Teleport to="body">
       <div v-if="showForm" class="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" @click.self="showForm=false">
-        <div class="bg-[#1A0F07] border border-[#5A2E18] rounded-2xl w-full max-w-md">
-          <div class="flex items-center justify-between p-5 border-b border-[#5A2E18]">
-            <h3 class="font-semibold text-[#F5ECD7]">Add Gallery Image</h3>
+        <div class="bg-[#1A0F07] border border-[#5A2E18] rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+          <div class="flex items-center justify-between p-5 border-b border-[#5A2E18] sticky top-0 bg-[#1A0F07] z-10">
+            <h3 class="font-semibold text-[#F5ECD7]">Add Gallery Images</h3>
             <button @click="showForm=false" class="text-[#7A5C45] hover:text-[#F5ECD7]"><XMarkIcon class="w-5 h-5" /></button>
           </div>
           <form @submit.prevent="save" class="p-5 space-y-4">
@@ -51,17 +51,13 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-[#C8A882] mb-1">Alt Text (description)</label>
-              <input  v-model="form.alt" class="w-full px-3 py-2 rounded-lg bg-[#2A1408] border border-[#5A2E18] text-[#F5ECD7] text-sm placeholder-[#7A5C45] focus:outline-none focus:border-[#C8860A] transition" placeholder="Describe the image" />
+              <label class="block text-xs font-medium text-[#C8A882] mb-2">Select Images</label>
+              <MultipleImageUploader v-model="form.images" />
             </div>
-            <div>
-              <label class="block text-xs font-medium text-[#C8A882] mb-1">Image *</label>
-              <ImageUploader v-model="form.src" />
-            </div>
-            <div class="flex justify-end gap-3 pt-2">
+            <div class="flex justify-end gap-3 pt-2 border-t border-[#5A2E18]">
               <button type="button" @click="showForm=false" class="px-4 py-2 text-sm text-[#C8A882]">Cancel</button>
-              <button type="submit" :disabled="saving || !form.src" class="px-5 py-2 bg-[#C8860A] hover:bg-[#A36A06] text-white text-sm font-semibold rounded-xl disabled:opacity-60">
-                {{ saving ? 'Saving...' : 'Add to Gallery' }}
+              <button type="submit" :disabled="saving || form.images.length === 0" class="px-5 py-2 bg-[#C8860A] hover:bg-[#A36A06] text-white text-sm font-semibold rounded-xl disabled:opacity-60">
+                {{ saving ? 'Saving...' : `Add ${form.images.length} Image${form.images.length !== 1 ? 's' : ''} to Gallery` }}
               </button>
             </div>
           </form>
@@ -76,7 +72,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useAdminAuth } from '../stores/auth'
 import { adminApi } from '../stores/auth'
 import { PlusIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-import ImageUploader from '../components/ImageUploader.vue'
+import MultipleImageUploader from '../components/MultipleImageUploader.vue'
 
 const auth      = useAdminAuth()
 const images    = ref([])
@@ -84,7 +80,7 @@ const showForm  = ref(false)
 const saving    = ref(false)
 const filterCat = ref('all')
 const categories = ['interior','outdoor','food','drinks','bar','music','staff']
-const form = ref({ category: 'food', alt: '', src: '', active: true })
+const form = ref({ category: 'food', images: [] })
 
 const filtered = computed(() =>
   filterCat.value === 'all' ? images.value : images.value.filter(i => i.category === filterCat.value)
@@ -96,17 +92,29 @@ async function load() {
 }
 
 function openForm() {
-  form.value = { category: 'food', alt: '', src: '', active: true }
+  form.value = { category: 'food', images: [] }
   showForm.value = true
 }
 
 async function save() {
-  if (!form.value.src) return
+  if (form.value.images.length === 0) return
+  
   saving.value = true
   try {
-    await adminApi.post('/admin/gallery', form.value)
-    await load(); showForm.value = false
-  } finally { saving.value = false }
+    // Upload all images to the gallery
+    for (const img of form.value.images) {
+      await adminApi.post('/admin/gallery', {
+        category: form.value.category,
+        alt: img.alt || '',
+        src: img.src,
+        active: true
+      })
+    }
+    await load()
+    showForm.value = false
+  } finally { 
+    saving.value = false 
+  }
 }
 
 async function toggleActive(img) {

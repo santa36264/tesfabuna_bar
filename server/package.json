@@ -1,0 +1,39 @@
+{
+  "name": "tesfabuna-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TesfaBunna Bar - Restaurant Management System API (Node + Express + PostgreSQL)",
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "migrate": "knex migrate:latest",
+    "migrate:rollback": "knex migrate:rollback",
+    "migrate:status": "knex migrate:status",
+    "seed": "knex seed:run",
+    "db:fresh": "knex migrate:fresh --seed",
+    "db:reset": "knex migrate:rollback --all && knex migrate:latest && knex seed:run",
+    "create-admin": "node scripts/create-admin.js"
+  },
+  "keywords": [
+    "restaurant",
+    "express",
+    "postgresql",
+    "api"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "knex": "^3.1.0",
+    "multer": "^2.0.1",
+    "pg": "^8.13.1",
+    "zod": "^4.0.0"
+  }
+}

@@ -1,0 +1,48 @@
+import db from '../../db/index.js'
+import ApiError from '../../utils/ApiError.js'
+import { BlogPost } from '../../models/index.js'
+import { serializeAll, compact } from '../../utils/serialize.js'
+import slugify from '../../utils/slugify.js'
+
+const findOrFail = async (id) => {
+  const row = await db(BlogPost.table).where('id', id).first()
+  if (!row) throw ApiError.notFound(`No query results for model [${BlogPost.table}] ${id}.`)
+  return row
+}
+
+export const index = async (_req, res) => {
+  const rows = await db(BlogPost.table).orderBy('published_at', 'desc')
+  res.json({ data: serializeAll(rows) })
+}
+
+export const store = async (req, res) => {
+  const payload = { ...compact(req.body), slug: slugify(req.body.title) }
+  const [post] = await db(BlogPost.table).insert(payload).returning('*')
+  res.status(201).json({ data: BlogPost.serialize(post) })
+}
+
+export const show = async (req, res) => {
+  res.json({ data: BlogPost.serialize(await findOrFail(req.params.id)) })
+}
+
+export const update = async (req, res) => {
+  const post = await findOrFail(req.params.id)
+  const payload = compact(req.body)
+
+  if (req.body.title !== undefined) {
+    payload.slug = slugify(req.body.title)
+  }
+
+  const [updated] = await db(BlogPost.table)
+    .where('id', post.id)
+    .update({ ...payload, updated_at: new Date() })
+    .returning('*')
+
+  res.json({ data: BlogPost.serialize(updated) })
+}
+
+export const destroy = async (req, res) => {
+  const post = await findOrFail(req.params.id)
+  await db(BlogPost.table).where('id', post.id).del()
+  res.status(204).end()
+}

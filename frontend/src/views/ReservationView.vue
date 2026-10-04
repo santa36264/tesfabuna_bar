@@ -145,7 +145,11 @@ function submitReservation() {
   loading.value = true
   api.post('/reservations', form)
     .then(() => { loading.value = false; submitted.value = true })
-    .catch(() => { loading.value = false; submitted.value = true })
+    .catch((err) => { 
+      loading.value = false
+      alert(`Reservation failed: ${err.response?.data?.message || err.message || 'Please try again later'}`)
+      console.error('Reservation error:', err)
+    })
 }
 function resetForm() {
   submitted.value = false
