@@ -2,43 +2,43 @@
   <div :class="['pt-20 min-h-screen', themeStore.isDark ? 'bg-[#1A0F07] text-[#F5ECD7]' : 'bg-[#FBF6EE] text-[#1C1008]']">
 
     <!-- Hero -->
-    <div class="relative h-52 sm:h-72 overflow-hidden">
+    <div class="relative h-48 sm:h-52 md:h-64 lg:h-72 overflow-hidden">
       <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80" alt="Reservation" class="w-full h-full object-cover" />
       <div class="absolute inset-0 bg-black/65 flex items-center justify-center text-center">
-        <div>
-          <p class="text-[#C8860A] text-sm font-semibold tracking-[3px] uppercase mb-2">Book Your Table</p>
-          <h1 class="font-serif text-4xl sm:text-5xl font-bold text-white">{{ t('reservation.title') }}</h1>
-          <p class="text-[#F5ECD7]/80 mt-2">{{ t('reservation.subtitle') }}</p>
+        <div class="px-4">
+          <p class="text-[#C8860A] text-xs sm:text-sm font-semibold tracking-[2px] sm:tracking-[3px] uppercase mb-2">Book Your Table</p>
+          <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white">{{ t('reservation.title') }}</h1>
+          <p class="text-[#F5ECD7]/80 mt-2 text-sm sm:text-base">{{ t('reservation.subtitle') }}</p>
         </div>
       </div>
     </div>
 
-    <div class="max-w-3xl mx-auto px-4 py-14">
+    <div class="max-w-3xl mx-auto px-4 py-10 sm:py-14">
 
       <!-- Success State -->
-      <div v-if="submitted" data-aos="zoom-in" class="text-center py-16">
-        <div class="text-6xl mb-5">🎉</div>
-        <h2 class="font-serif text-3xl font-bold text-[#C8860A] mb-3">Reservation Confirmed!</h2>
-        <p :class="['text-lg mb-2', themeStore.isDark ? 'text-[#D4B896]' : 'text-[#1C1008]']">
+      <div v-if="submitted" data-aos="zoom-in" class="text-center py-12 sm:py-16">
+        <div class="text-5xl sm:text-6xl mb-4 sm:mb-5">🎉</div>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#C8860A] mb-3">Reservation Confirmed!</h2>
+        <p :class="['text-base sm:text-lg mb-2', themeStore.isDark ? 'text-[#D4B896]' : 'text-[#1C1008]']">
           Thank you, <strong>{{ form.name }}</strong>!
         </p>
-        <p :class="['mb-8 max-w-md mx-auto', themeStore.isDark ? 'text-[#C8A882]' : 'text-[#2A1208]']">
+        <p :class="['mb-6 sm:mb-8 max-w-md mx-auto text-sm sm:text-base px-4', themeStore.isDark ? 'text-[#C8A882]' : 'text-[#2A1208]']">
           We've reserved a table for <strong>{{ form.guests }}</strong> guest{{ form.guests > 1 ? 's' : '' }}
           on <strong>{{ form.date }}</strong> at <strong>{{ form.time }}</strong>.
           A confirmation will be sent to <strong>{{ form.email }}</strong>.
         </p>
-        <button @click="resetForm" class="px-8 py-3 bg-[#C8860A] hover:bg-[#A36A06] text-white font-semibold rounded-full transition-colors shadow-md">
+        <button @click="resetForm" class="px-6 sm:px-8 py-3 bg-[#C8860A] hover:bg-[#A36A06] text-white font-semibold rounded-full transition-colors shadow-md text-sm sm:text-base">
           Make Another Reservation
         </button>
       </div>
 
       <!-- Booking Form -->
       <form v-else @submit.prevent="submitReservation" data-aos="fade-up"
-        :class="['rounded-2xl p-8 border', themeStore.isDark ? 'bg-[#3B1F0A] border-[#5A2E18] shadow-xl' : 'bg-white border-[#DFC9A0] shadow-lg']">
-        <h2 :class="['font-serif text-2xl font-bold mb-6', themeStore.isDark ? 'text-[#F5ECD7]' : 'text-[#1C1008]']">
+        :class="['rounded-2xl p-5 sm:p-6 md:p-8 border', themeStore.isDark ? 'bg-[#3B1F0A] border-[#5A2E18] shadow-xl' : 'bg-white border-[#DFC9A0] shadow-lg']">
+        <h2 :class="['font-serif text-xl sm:text-2xl font-bold mb-5 sm:mb-6', themeStore.isDark ? 'text-[#F5ECD7]' : 'text-[#1C1008]']">
           Book Your Experience
         </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <div>
             <label :class="labelClass">{{ t('reservation.date') }} *</label>
             <input v-model="form.date" type="date" required :min="today" :class="inputClass" />

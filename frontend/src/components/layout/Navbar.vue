@@ -4,11 +4,11 @@
       <div class="flex items-center justify-between h-16 lg:h-20">
 
         <!-- ── Logo ─────────────────────────── -->
-        <RouterLink to="/" class="flex items-center gap-2.5 flex-shrink-0">
-          <img src="/logo.png" alt="TesfaBunna" class="h-20 w-auto object-contain" />
+        <RouterLink to="/" class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
+          <img src="/logo.png" alt="TesfaBunna" class="h-14 sm:h-16 lg:h-20 w-auto object-contain" />
           <div>
-            <div class="font-serif font-bold text-3xl leading-none text-[#C8860A]">TesfaBunna</div>
-            <div :class="['text-[9px] tracking-[3px] uppercase font-medium', themeStore.isDark ? 'text-[#C8A882]' : 'text-[#3B1F0A]']">
+            <div class="font-serif font-bold text-xl sm:text-2xl lg:text-3xl leading-none text-[#C8860A]">TesfaBunna</div>
+            <div :class="['text-[8px] sm:text-[9px] tracking-[2px] sm:tracking-[3px] uppercase font-medium', themeStore.isDark ? 'text-[#C8A882]' : 'text-[#3B1F0A]']">
               Bar & Restaurant
             </div>
           </div>

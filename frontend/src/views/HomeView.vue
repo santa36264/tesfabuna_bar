@@ -30,18 +30,18 @@
       </div>
 
       <!-- Content -->
-      <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-        <p data-aos="fade-up" class="text-[#C8860A] text-sm font-semibold tracking-[4px] uppercase mb-4">Welcome to</p>
-        <h1 data-aos="fade-up" data-aos-delay="100" class="font-serif text-5xl sm:text-7xl font-bold text-white mb-4 leading-tight">
+      <div class="relative z-10 text-center px-4 max-w-4xl mx-auto pt-20 sm:pt-0">
+        <p data-aos="fade-up" class="text-[#C8860A] text-xs sm:text-sm font-semibold tracking-[3px] sm:tracking-[4px] uppercase mb-3 sm:mb-4">Welcome to</p>
+        <h1 data-aos="fade-up" data-aos-delay="100" class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-3 sm:mb-4 leading-tight">
           TesfaBunna
         </h1>
-        <p data-aos="fade-up" data-aos-delay="200" class="text-white/90 text-xl sm:text-2xl font-light mb-3">Bar & Restaurant</p>
-        <p data-aos="fade-up" data-aos-delay="300" class="text-[#F5ECD7]/80 text-lg mb-10 max-w-xl mx-auto">{{ t('hero.slogan') }}</p>
-        <div data-aos="fade-up" data-aos-delay="400" class="flex flex-col sm:flex-row gap-4 justify-center">
-          <RouterLink to="/reservation" class="px-8 py-4 bg-[#C8860A] hover:bg-[#A36A06] text-white font-semibold rounded-full text-lg transition-all hover:scale-105 hover:shadow-lg">
+        <p data-aos="fade-up" data-aos-delay="200" class="text-white/90 text-lg sm:text-xl md:text-2xl font-light mb-2 sm:mb-3">Bar & Restaurant</p>
+        <p data-aos="fade-up" data-aos-delay="300" class="text-[#F5ECD7]/80 text-base sm:text-lg mb-8 sm:mb-10 max-w-xl mx-auto px-2">{{ t('hero.slogan') }}</p>
+        <div data-aos="fade-up" data-aos-delay="400" class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
+          <RouterLink to="/reservation" class="px-6 sm:px-8 py-3 sm:py-4 bg-[#C8860A] hover:bg-[#A36A06] text-white font-semibold rounded-full text-base sm:text-lg transition-all hover:scale-105 hover:shadow-lg">
             {{ t('hero.reserve') }}
           </RouterLink>
-          <RouterLink to="/menu" class="px-8 py-4 bg-[#F5ECD7]/10 hover:bg-[#F5ECD7]/20 backdrop-blur-sm text-white font-semibold rounded-full text-lg border border-[#F5ECD7]/40 transition-all hover:scale-105">
+          <RouterLink to="/menu" class="px-6 sm:px-8 py-3 sm:py-4 bg-[#F5ECD7]/10 hover:bg-[#F5ECD7]/20 backdrop-blur-sm text-white font-semibold rounded-full text-base sm:text-lg border border-[#F5ECD7]/40 transition-all hover:scale-105">
             {{ t('hero.viewMenu') }}
           </RouterLink>
         </div>
@@ -64,12 +64,12 @@
     </section>
 
     <!-- Featured Dishes - horizontal scroll slider -->
-    <section :class="['py-20 px-4', themeStore.isDark ? 'bg-[#2A1408]' : 'bg-[#F5ECD7]']">
+    <section :class="['py-12 sm:py-16 md:py-20 px-4', themeStore.isDark ? 'bg-[#2A1408]' : 'bg-[#F5ECD7]']">
       <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-10" data-aos="fade-up">
-          <p class="text-[#C8860A] text-sm font-semibold tracking-[3px] uppercase mb-2">Our Specialties</p>
-          <h2 :class="['font-serif text-4xl font-bold', themeStore.isDark ? 'text-[#F5ECD7]' : 'text-[#1C1008]']">{{ t('home.featuredDishes') }}</h2>
-          <p :class="['mt-3 max-w-xl mx-auto', themeStore.isDark ? 'text-[#D4B896]' : 'text-[#2A1208]']">Authentic Ethiopian flavors crafted with love and tradition</p>
+        <div class="text-center mb-8 sm:mb-10" data-aos="fade-up">
+          <p class="text-[#C8860A] text-xs sm:text-sm font-semibold tracking-[2px] sm:tracking-[3px] uppercase mb-2">Our Specialties</p>
+          <h2 :class="['font-serif text-3xl sm:text-4xl font-bold', themeStore.isDark ? 'text-[#F5ECD7]' : 'text-[#1C1008]']">{{ t('home.featuredDishes') }}</h2>
+          <p :class="['mt-2 sm:mt-3 max-w-xl mx-auto text-sm sm:text-base px-4', themeStore.isDark ? 'text-[#D4B896]' : 'text-[#2A1208]']">Authentic Ethiopian flavors crafted with love and tradition</p>
         </div>
 
         <!-- Slider -->

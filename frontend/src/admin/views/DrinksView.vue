@@ -15,8 +15,8 @@
       </button>
     </div>
 
-    <div class="bg-[#3B1F0A] border border-[#5A2E18] rounded-2xl overflow-hidden">
-      <table class="w-full text-sm">
+    <div class="bg-[#3B1F0A] border border-[#5A2E18] rounded-2xl overflow-x-auto">
+      <table class="w-full text-sm min-w-[640px]">
         <thead class="border-b border-[#5A2E18]">
           <tr class="text-[#7A5C45] text-xs uppercase tracking-wider">
             <th class="px-4 py-3 text-left">Image</th>

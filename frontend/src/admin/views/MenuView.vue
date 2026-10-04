@@ -1,8 +1,8 @@
 ﻿<template>
   <div>
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="font-serif text-2xl font-bold text-[#F5ECD7]">Food Menu</h2>
-      <button @click="openForm()" class="px-4 py-2 bg-[#C8860A] hover:bg-[#A36A06] text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-6">
+      <h2 class="font-serif text-xl sm:text-2xl font-bold text-[#F5ECD7]">Food Menu</h2>
+      <button @click="openForm()" class="px-4 py-2 bg-[#C8860A] hover:bg-[#A36A06] text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
         <PlusIcon class="w-4 h-4" /> Add Item
       </button>
     </div>
@@ -17,45 +17,45 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-[#3B1F0A] border border-[#5A2E18] rounded-2xl overflow-hidden">
-      <table class="w-full text-sm">
+    <div class="bg-[#3B1F0A] border border-[#5A2E18] rounded-2xl overflow-x-auto">
+      <table class="w-full text-sm min-w-[640px]">
         <thead class="border-b border-[#5A2E18]">
           <tr class="text-[#7A5C45] text-xs uppercase tracking-wider">
-            <th class="px-4 py-3 text-left">Image</th>
-            <th class="px-4 py-3 text-left">Name</th>
-            <th class="px-4 py-3 text-left">Category</th>
-            <th class="px-4 py-3 text-right">Price</th>
-            <th class="px-4 py-3 text-center">Status</th>
-            <th class="px-4 py-3 text-center">Actions</th>
+            <th class="px-3 sm:px-4 py-3 text-left">Image</th>
+            <th class="px-3 sm:px-4 py-3 text-left">Name</th>
+            <th class="px-3 sm:px-4 py-3 text-left">Category</th>
+            <th class="px-3 sm:px-4 py-3 text-right">Price</th>
+            <th class="px-3 sm:px-4 py-3 text-center">Status</th>
+            <th class="px-3 sm:px-4 py-3 text-center">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-[#5A2E18]">
           <tr v-if="!filtered.length">
-            <td colspan="6" class="px-4 py-8 text-center text-[#7A5C45]">No items found.</td>
+            <td colspan="6" class="px-3 sm:px-4 py-8 text-center text-[#7A5C45]">No items found.</td>
           </tr>
           <tr v-for="item in filtered" :key="item.id" class="hover:bg-[#2A1408] transition-colors">
-            <td class="px-4 py-3">
-              <img v-if="item.image" :src="item.image" :alt="item.name" class="w-12 h-12 rounded-lg object-cover" />
-              <div v-else class="w-12 h-12 rounded-lg bg-[#2A1408] flex items-center justify-center">
+            <td class="px-3 sm:px-4 py-3">
+              <img v-if="item.image" :src="item.image" :alt="item.name" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover" />
+              <div v-else class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#2A1408] flex items-center justify-center">
                 <PhotoIcon class="w-5 h-5 text-[#5A2E18]" />
               </div>
             </td>
-            <td class="px-4 py-3">
-              <p class="font-medium text-[#F5ECD7]">{{ item.name }}</p>
-              <p class="text-xs text-[#7A5C45] line-clamp-1 max-w-xs">{{ item.description }}</p>
+            <td class="px-3 sm:px-4 py-3">
+              <p class="font-medium text-[#F5ECD7] text-xs sm:text-sm">{{ item.name }}</p>
+              <p class="text-xs text-[#7A5C45] line-clamp-1 max-w-[120px] sm:max-w-xs">{{ item.description }}</p>
             </td>
-            <td class="px-4 py-3">
-              <span class="text-xs bg-[#2A1408] text-[#C8860A] px-2 py-1 rounded-full capitalize">{{ item.category }}</span>
+            <td class="px-3 sm:px-4 py-3">
+              <span class="text-xs bg-[#2A1408] text-[#C8860A] px-2 py-1 rounded-full capitalize whitespace-nowrap">{{ item.category }}</span>
             </td>
-            <td class="px-4 py-3 text-right text-[#C8860A] font-semibold">ETB {{ item.price }}</td>
-            <td class="px-4 py-3 text-center">
+            <td class="px-3 sm:px-4 py-3 text-right text-[#C8860A] font-semibold text-xs sm:text-sm whitespace-nowrap">ETB {{ item.price }}</td>
+            <td class="px-3 sm:px-4 py-3 text-center">
               <button @click="toggleAvailable(item)"
-                :class="['text-xs px-2 py-1 rounded-full font-medium transition-colors',
+                :class="['text-xs px-2 py-1 rounded-full font-medium transition-colors whitespace-nowrap',
                   item.available ? 'bg-green-900/40 text-green-400 hover:bg-green-900/60' : 'bg-red-900/40 text-red-400 hover:bg-red-900/60']">
                 {{ item.available ? 'Active' : 'Hidden' }}
               </button>
             </td>
-            <td class="px-4 py-3">
+            <td class="px-3 sm:px-4 py-3">
               <div class="flex items-center justify-center gap-2">
                 <button @click="openForm(item)" class="text-[#C8A882] hover:text-[#C8860A]"><PencilIcon class="w-4 h-4" /></button>
                 <button @click="deleteItem(item)" class="text-[#C8A882] hover:text-red-400"><TrashIcon class="w-4 h-4" /></button>

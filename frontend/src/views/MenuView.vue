@@ -2,17 +2,17 @@
   <div :class="['pt-20 min-h-screen', themeStore.isDark ? 'bg-[#1A0F07] text-[#F5ECD7]' : 'bg-[#FBF6EE] text-[#1C1008]']">
 
     <!-- Hero -->
-    <div class="relative h-52 sm:h-72 overflow-hidden">
+    <div class="relative h-48 sm:h-52 md:h-64 lg:h-72 overflow-hidden">
       <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=1920&q=80" alt="Ethiopian Food Menu" class="w-full h-full object-cover" />
       <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
-        <div class="text-center">
-          <p class="text-[#C8860A] text-sm font-semibold tracking-[3px] uppercase mb-2">Authentic Ethiopian</p>
-          <h1 class="font-serif text-4xl sm:text-5xl font-bold text-white">{{ t('menu.title') }}</h1>
+        <div class="text-center px-4">
+          <p class="text-[#C8860A] text-xs sm:text-sm font-semibold tracking-[2px] sm:tracking-[3px] uppercase mb-2">Authentic Ethiopian</p>
+          <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-white">{{ t('menu.title') }}</h1>
         </div>
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 py-10">
+    <div class="max-w-7xl mx-auto px-4 py-8 sm:py-10">
 
       <!-- Search + Dietary Filter -->
       <div class="flex flex-col sm:flex-row gap-3 mb-6" data-aos="fade-up">
@@ -56,7 +56,7 @@
       </div>
 
       <!-- Items Grid -->
-      <div v-if="filtered.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div v-if="filtered.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
         <div v-for="(item, i) in filtered" :key="item.id"
           :data-aos="'fade-up'" :data-aos-delay="(i % 8) * 60"
           :class="['rounded-2xl overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl group',

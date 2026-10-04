@@ -2,7 +2,7 @@
   <div :class="['pt-20 min-h-screen', themeStore.isDark ? 'bg-[#1A0F07] text-[#F5ECD7]' : 'bg-[#FBF6EE] text-[#1C1008]']">
 
     <!-- Hero -->
-    <div class="relative h-52 sm:h-72 overflow-hidden">
+    <div class="relative h-48 sm:h-52 md:h-64 lg:h-72 overflow-hidden">
       <img src="https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=1920&q=80" alt="Bar & Drinks" class="w-full h-full object-cover" />
       <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
         <div class="text-center">
