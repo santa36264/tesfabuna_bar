@@ -1,16 +1,12 @@
 import ApiError from '../../utils/ApiError.js'
 import * as messages from '../../utils/messages.js'
 import { detectImage } from '../../utils/imageType.js'
-import { randomFilename } from '../../utils/token.js'
-import { saveBuffer, deleteFile, publicUrl, ensureUploadDir } from '../../utils/storage.js'
+import cloudinary from '../../config/cloudinary.js'
 
 const fileTypeList = ['jpeg', 'png', 'jpg', 'gif', 'webp']
 
 /**
- * Replaces Laravel's `'image' => 'image|mimes:...|max:5120'` + `store()`.
- *
- * The extension is derived from the file's magic bytes rather than the
- * client-supplied mimetype, so a renamed .php or .svg cannot be written.
+ * Upload image to Cloudinary (works on Vercel serverless)
  */
 export const upload = async (req, res) => {
   if (!req.file) {
@@ -27,26 +23,54 @@ export const upload = async (req, res) => {
     throw ApiError.validation({ image: [messages.mustBeFileType('image', fileTypeList)] })
   }
 
-  const filename = randomFilename(detected.ext)
-  await ensureUploadDir()
-  await saveBuffer(req.file.buffer, filename)
+  // Check if Cloudinary is configured
+  if (!process.env.CLOUDINARY_URL && !process.env.CLOUDINARY_CLOUD_NAME) {
+    throw ApiError.serverError('Cloudinary not configured. Please set CLOUDINARY_URL environment variable.')
+  }
 
-  res.status(201).json({
-    url: publicUrl(filename),
-    path: filename,
-    size: req.file.size,
-    mime: detected.mime,
-  })
+  try {
+    // Upload to Cloudinary using buffer
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'tesfabunna',
+          resource_type: 'image',
+          allowed_formats: fileTypeList,
+        },
+        (error, result) => {
+          if (error) reject(error)
+          else resolve(result)
+        }
+      )
+      uploadStream.end(req.file.buffer)
+    })
+
+    res.status(201).json({
+      url: result.secure_url,
+      path: result.public_id,
+      size: req.file.size,
+      mime: detected.mime,
+    })
+  } catch (error) {
+    console.error('Cloudinary upload error:', error)
+    throw ApiError.serverError('Failed to upload image to cloud storage.')
+  }
 }
 
 export const remove = async (req, res) => {
-  const { path: relativePath } = req.body
+  const { path: publicId } = req.body
 
-  // Laravel accepted "uploads/<file>"; accept a bare filename too.
-  const normalised = String(relativePath).replace(/^uploads[\\/]/, '')
-  await deleteFile(normalised)
+  if (!publicId) {
+    throw ApiError.validation({ path: ['Path is required'] })
+  }
 
-  res.json({ message: 'Image deleted.' })
+  try {
+    await cloudinary.uploader.destroy(publicId)
+    res.json({ message: 'Image deleted.' })
+  } catch (error) {
+    console.error('Cloudinary delete error:', error)
+    throw ApiError.serverError('Failed to delete image from cloud storage.')
+  }
 }
 
 export default { upload, remove }
