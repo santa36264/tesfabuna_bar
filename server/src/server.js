@@ -36,4 +36,10 @@ const start = async () => {
   process.on('SIGTERM', () => shutdown('SIGTERM'))
 }
 
-start()
+// Only start server if not running in serverless environment
+if (process.env.VERCEL !== '1') {
+  start()
+}
+
+// Export for Vercel serverless
+export default app
